@@ -77,6 +77,19 @@ class CarsCreate(BaseModel):
 
     @model_validator(mode='before')
     def validate_model(cls, values):
+        """
+                Validate the model of the car based on the brand.
+
+                Parameters:
+                -----------
+                values : dict
+                    The dictionary of values to be validated.
+
+                Raises:
+                -------
+                ValueError
+                    If the model is not valid for the brand.
+                """
         brand = values.get('brand')
         model = values.get('model')
 

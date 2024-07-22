@@ -26,10 +26,32 @@ app.include_router(
 
 @app.get("/protected-route")
 def protected_route(user: User = Depends(current_user)):
+    """
+        A protected route that returns a greeting to the authenticated user.
+
+        Parameters:
+        -----------
+        user : User, optional
+            The current authenticated user, automatically injected by FastAPI.
+
+        Returns:
+        --------
+        str
+            A greeting message including the username of the authenticated user.
+        """
+
     return f"Hello, {user.username }"
 
 @app.get("/unprotected-route")
 def unprotected_route():
+    """
+        An unprotected route that returns a greeting to any user.
+
+        Returns:
+        --------
+        str
+            A generic greeting message.
+        """
     return f"Hello, anonym"
 
 
