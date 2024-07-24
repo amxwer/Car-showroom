@@ -1,9 +1,15 @@
+from contextlib import asynccontextmanager
+from collections.abc import AsyncIterator
+from redis import asyncio as aioredis, StrictRedis
 from fastapi import FastAPI, Depends
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
 
 from auth.base_config import current_user, fastapi_users, auth_backend
 from auth.models import User
 from auth.schemas import UserRead, UserCreate
 from cars.router import router as router_car
+from tasks.router import router as router_tasks
 
 app = FastAPI(
     title = "app",
@@ -56,3 +62,9 @@ def unprotected_route():
 
 
 app.include_router(router_car)
+app.include_router(router_tasks)
+
+@app.on_event("startup")
+async def startup():
+    redis = aioredis.from_url("redis://localhost")
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
