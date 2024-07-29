@@ -1,12 +1,12 @@
 import cache
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends,HTTPException
 from fastapi_cache.decorator import cache
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cars.models import Cars
 from cars.schemas import CarsCreate,CarsRead
-from auth.connection_database import get_async_session
+from database import get_async_session
 
 router = APIRouter(
     prefix="/cars",
@@ -14,9 +14,8 @@ router = APIRouter(
 
 )
 
-
-@router.get("/")
-@cache(expire=30)
+#cache(expire=30)
+@router.get("/find")
 async def get_cars(brand_type : str,session: AsyncSession = Depends(get_async_session)):
     """
         Fetch cars based on the brand type.
@@ -33,12 +32,24 @@ async def get_cars(brand_type : str,session: AsyncSession = Depends(get_async_se
         List[Cars]
             A list of cars that match the specified brand type.
         """
-    query = select(Cars).where(Cars.brand == brand_type)
-    result = await session.execute(query)
-    return result.scalars().all()
+    try:
+        query = select(Cars).where(Cars.brand == brand_type)
+        result = await session.execute(query)
+        return {
+            "status": "success",
+            "data": result.scalars().all(),
+            "details:":"Cars showroom"
+        }
+    except Exception:
+        raise HTTPException(status_code=500, detail={
+            "status": "error",
+            "data": None,
+            "details": None
+        })
 
-@router.post("/")
-@cache(expire=30)
+
+#@cache(expire=30)
+@router.post("/add")
 async def add_cars(new_cars: CarsCreate,session: AsyncSession =Depends(get_async_session)):
     """
         Add a new car to the database.
@@ -55,6 +66,7 @@ async def add_cars(new_cars: CarsCreate,session: AsyncSession =Depends(get_async
         dict
             A confirmation message indicating the status of the operation.
         """
+    #TODO добвавить try:except
     stmt = insert(Cars).values(**new_cars.dict())
     await session.execute(stmt)
     await session.commit()

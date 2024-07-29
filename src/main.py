@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from redis import asyncio as aioredis, StrictRedis
 from fastapi import FastAPI, Depends
+
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 

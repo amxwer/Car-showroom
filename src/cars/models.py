@@ -4,7 +4,7 @@ import enum
 from sqlalchemy import Table, MetaData, Integer, Column, Enum, String, Float
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 
-metadata = MetaData()
+from database import metadata
 
 class Base(DeclarativeBase):
     metadata = metadata

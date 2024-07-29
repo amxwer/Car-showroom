@@ -2,12 +2,12 @@ import datetime
 from datetime import datetime
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
-from sqlalchemy import MetaData, Table, Column, String, Integer, JSON, TIMESTAMP, ForeignKey, Boolean
+from sqlalchemy import  Table, Column, String, Integer, JSON, TIMESTAMP, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 
-from auth.connection_database import Base
+from database import Base,metadata
 
-metadata = MetaData()
+
 
 
 role = Table(
