@@ -9,15 +9,18 @@ from database import Base,metadata
 
 
 
-
+#TODO переделать orm классы
 role = Table(
-    'role', metadata,
+    'role',
+    metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String(255), nullable=False),
     Column("permissions",JSON)
 
 )
 
+
+#TODO переделать orm классы
 user = Table(
     "user",
     metadata,
@@ -62,7 +65,6 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     registered_at:Mapped[TIMESTAMP] = mapped_column(
         "registered_at", TIMESTAMP, default=datetime.utcnow
     )
-
     role_id:Mapped[Integer] = mapped_column(
         "role_id", Integer, ForeignKey(role.c.id)
     )

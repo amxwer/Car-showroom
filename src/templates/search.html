@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script>
+    const searchForOperation = () => {
+        const searchInputValue = document.getElementById("car_search").value;
+        window.location.href = `/pages/search/${searchInputValue}`;
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center flex-col items-center">
+    <div class="flex my-3 gap-5">
+        <input id="car_search" type="text" placeholder="Brand" class="text-xl">
+        <button onclick="searchForOperation()" class="border-2 rounded-3xl bg-gray-300 p-3">Find by brand</button>
+    </div>
+    {% for car in cars %}
+
+        <div class="flex rounded-3 border-2 p-3 mt-5">
+            {% if car.brand =='VOLKSWAGEN' %}
+                <img width="150" src="{{url_for('static',path='volkswagen.jpg') }}",alt="cars" class="mr-5">
+            {% else %}
+                <img width="150" src="{{url_for('static',path='seat.jpg')}}",alt="cars" class="mr-5">
+            {% endif %}
+            <div class="flex flex-col">
+                <span class="text-2xl font-bold">{{ car.brand }}</span>
+                <span class="text-lg">{{ car.model }}</span>
+                <span class="text-lg">{{ car.year_of_release  }}</span>
+                <span class="text-lg">{{ car.price  }}</span>
+                <span class="text-lg">{{ car.engine_capacity  }}</span>
+                <span class="text-lg">{{ car.gearbox  }}</span>
+                <span class="text-lg">{{ car.type_car }}</span>
+                <span class="text-lg">{{ car.power }}</span>
+                <span class="text-lg">{{ car.car_config  }}</span>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
